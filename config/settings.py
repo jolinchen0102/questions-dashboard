@@ -26,14 +26,12 @@ SECRET_KEY = "django-insecure-7adf=hv2dg0-+ufvs^-3^i7fy8l7qu2s*t!gk_1qh9(-cu==*)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['dashboard-cb.herokuapp.com', '.localhost', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django_tables2',
-    "django_filters",
     "dashboard.apps.DashboardConfig",
     "django.contrib.admin",
     "django.contrib.auth",
