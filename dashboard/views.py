@@ -5,15 +5,15 @@ from fusioncharts import FusionCharts
 import requests
 import json
 
-RELEVANCE_CHOICES = (
-    (1, "KYC onboarding"),
-    (2, "Funding features"),
-    (3, "Trading features"),
-    (4, "Custody features"),
-    (5, "Fee schedule"),
-    (6, "Security"),
-    (7, "Others"),
-)
+RELEVANCE_CHOICES = {
+    "1": "KYC onboarding",
+    "2": "Funding features",
+    "3": "Trading features",
+    "4": "Custody features",
+    "5": "Fee schedule",
+    "6": "Security",
+    "7": "Others",
+}
 COUNTRY_MAP = {
 		"China": "101",
 		"Singapore": "119",
@@ -85,3 +85,87 @@ def myFirstMap(request):
     print(dataSource["data"])
     return render(request, 'index.html', {'output': fusionMap.render()})
 
+def get_category_data(data):
+    category = {}
+    for elem in data:
+        cat = RELEVANCE_CHOICES[elem["category"][0]]
+        if cat in category:
+            category[cat] += 1
+        else: category[cat] = 1
+    return category
+
+def draw_treeMap(request):
+    raw_data = request_questions()
+    cat_dict = get_category_data(raw_data)
+    total = 0
+    for value in cat_dict.values():
+        total += value
+    dataSource = OrderedDict()
+    dataSource["chart"] = OrderedDict(
+		{
+			"animation": "0",
+			"hideTitle": "1",
+			"plotToolText": "<div><b>$label</b><br/> <b>Count: </b>$value<br/><b>Percentage: </b>$svalue%</div>",
+			"spacex": "0",
+			"spacey": "0",
+			"horizontalPadding": "1",
+			"verticalPadding": "1",
+			"hoveronallsiblingleaves": "1",
+			"plotborderthickness": ".5",
+			"plotbordercolor": "666666",
+			"legendpadding": "0",
+			"legendItemFontSize": "10",
+			"legendItemFontBold": "1",
+			"showLegend": "1",
+			"legendPointerWidth": "8",
+			"legenditemfontcolor": "3d5c5c",
+			"algorithm": "squarified",
+			"caption": "Tree Map of Questions Categories",
+			"legendScaleLineThickness": "0",
+			"legendCaptionFontSize": "10",
+			"legendaxisbordercolor": "bfbfbf",
+			"subcaption": "",
+			"legendCaption": "",
+			"theme": "zune"
+		}
+	)
+    dataSource["colorrange"] = OrderedDict(
+		{
+			"mapbypercent": "1",
+			"gradient": "1",
+			"minvalue": "0",
+			"code": "6da81e",
+			"startlabel": "",
+			"endlabel": "",
+			"color": [
+				{
+					"code": "ffffff",
+					"maxvalue": "50",
+					"label": ""
+				},
+				{
+					"code": "e24b1a",
+					"maxvalue": "100",
+					"label": ""
+				}
+			]
+		}
+	)
+    dataSource["data"] = [
+		{
+            "label": "Question Categories",
+            "value": str(total),
+            "data": []
+		}
+	]
+    
+    for k, v in cat_dict.items():
+        dataSource["data"][0]["data"].append({
+			"label": k,
+			"value": str(v),
+			"sValue": str(round(v/total*100, 2))
+		})
+        total += v
+    print(dataSource["data"])
+    treeMap = FusionCharts("treemap", "draw_treeMap", "590", "440", "treemap-container", "json", dataSource)
+    return render(request, 'treemap.html', {'output': treeMap.render()})

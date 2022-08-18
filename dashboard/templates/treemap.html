@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FC-python wrapper</title>
+    {% load static %}
+    <script type="text/javascript" src="{% static "dashboard/fusioncharts.js" %}"></script>
+    <script type="text/javascript" src="{% static "dashboard/fusioncharts.treemap.js" %}"></script>
+    <script type="text/javascript" src="{% static "dashboard/themes/fusioncharts.theme.fusion.js" %}"></script>
+    </head>
+    <body>
+        <div id="treemap-container">{{ output|safe }}</div>
+    </body>
+</html>
