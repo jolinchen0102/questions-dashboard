@@ -8,6 +8,7 @@ django = "~=4.0"
 requests = "*"
 json2html = "*"
 gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 
