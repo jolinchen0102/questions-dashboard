@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FC-python wrapper</title>
+    {% load static %}
+    <script type="text/javascript" src="{% static "dashboard/fusioncharts.js" %}"></script>
+    <script type="text/javascript" src="{% static "dashboard/fusioncharts.maps.js" %}"></script>
+    <script type="text/javascript" src="{% static "dashboard/maps/fusioncharts.worldwithcountries.js" %}"></script>
+    <script type="text/javascript" src="{% static "dashboard/themes/fusioncharts.theme.fusion.js" %}"></script>
+    </head>
+    <body>
+        <div id="myFirstmap-container">{{ output|safe }}</div>
+    </body>
+</html>

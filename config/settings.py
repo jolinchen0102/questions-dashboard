@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "dashboard.apps.DashboardConfig"
+    "dashboard.apps.DashboardConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -52,11 +52,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "config.urls"
-
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR), 'templates'],
+        "DIRS": [os.path.join(BASE_DIR), 'dashboard/templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -112,6 +111,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = "dashboard/static"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
