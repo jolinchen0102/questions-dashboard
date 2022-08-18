@@ -1,9 +1,10 @@
-from django.http import HttpResponse
+from django.http import JsonResponse
+from json2html import *
 from django.shortcuts import render
 from collections import OrderedDict
 from fusioncharts import FusionCharts
 import requests
-import json
+from django.template.loader import render_to_string
 
 RELEVANCE_CHOICES = {
     "1": "KYC onboarding",
@@ -29,6 +30,8 @@ def request_questions():
     except requests.exceptions.RequestException as e:
         print(e)
         return None
+
+raw_data = request_questions()
 
 def get_geolocation_data(data):
     geoloc = {}
@@ -82,7 +85,6 @@ def myFirstMap(request):
 			"showLabel": "1"
 		})
     fusionMap = FusionCharts("maps/worldwithcountries", "myFirstMap", "590", "440", "myFirstmap-container", "json", dataSource)
-    print(dataSource["data"])
     return render(request, 'index.html', {'output': fusionMap.render()})
 
 def get_category_data(data):
@@ -95,7 +97,6 @@ def get_category_data(data):
     return category
 
 def draw_treeMap(request):
-    raw_data = request_questions()
     cat_dict = get_category_data(raw_data)
     total = 0
     for value in cat_dict.values():
@@ -166,6 +167,17 @@ def draw_treeMap(request):
 			"sValue": str(round(v/total*100, 2))
 		})
         total += v
-    print(dataSource["data"])
     treeMap = FusionCharts("treemap", "draw_treeMap", "590", "440", "treemap-container", "json", dataSource)
     return render(request, 'treemap.html', {'output': treeMap.render()})
+
+def get_all_question(request):
+    data = raw_data.copy()
+    for i in range(len(data)):
+        data[i]["category"] = RELEVANCE_CHOICES[data[i]["category"][0]]
+    done = json2html.convert(json=data)
+    with open("dashboard/templates/dataview.html",'w') as f:
+        f.writelines(done)
+    return render(request, 'dataview.html')
+
+def base(request):
+    return render(request, 'base.html')

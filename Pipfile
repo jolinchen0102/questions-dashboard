@@ -6,8 +6,7 @@ name = "pypi"
 [packages]
 django = "~=4.0"
 requests = "*"
-django-filter = "*"
-django-tables2 = "*"
+json2html = "*"
 
 [dev-packages]
 
