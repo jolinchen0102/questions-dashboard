@@ -31,7 +31,6 @@ def request_questions():
         print(e)
         return None
 
-raw_data = request_questions()
 
 def get_geolocation_data(data):
     geoloc = {}
@@ -100,6 +99,7 @@ def get_category_data(data):
     return category
 
 def draw_treeMap(request):
+    raw_data = request_questions()
     cat_dict = get_category_data(raw_data)
     total = 0
     for value in cat_dict.values():
@@ -174,6 +174,7 @@ def draw_treeMap(request):
     return render(request, 'treemap.html', {'output': treeMap.render()})
 
 def get_all_question(request):
+    raw_data = request_questions()
     data = raw_data.copy()
     for i in range(len(data)):
         data[i]["category"] = RELEVANCE_CHOICES[data[i]["category"][0]]
