@@ -45,6 +45,9 @@ def get_geolocation_data(data):
 def myFirstMap(request):
     raw_data = request_questions()
     geo_dict = get_geolocation_data(raw_data)
+    max_count= 0
+    for v in geo_dict.values():
+        max_count = max(max_count, v)
     dataSource = OrderedDict()
     mapConfig = OrderedDict()
     mapConfig["caption"] = "Geographic Location Population"
@@ -60,17 +63,17 @@ def myFirstMap(request):
         "gradient": "1",
         "color": [{
                 "minValue": "0.5",
-                "maxValue": "3",
+                "maxValue": str(max_count//4),
                 "code": "#FFD74D"
             },
             {
-                "minValue": "3.0",
-                "maxValue": "6.0",
+                "minValue": str(max_count//4),
+                "maxValue": str(max_count//2),
                 "code": "#FB8C00"
             },
             {
-                "minValue": "6.0",
-                "maxValue": "9.0",
+                "minValue": str(3/4*max_count),
+                "maxValue": str(max_count),
                 "code": "#E65100"
             }
         ]
